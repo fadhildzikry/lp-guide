@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumbar Puncture — Clinical Guide v2</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0f14;
+    --surface: #131820;
+    --surface2: #1a2230;
+    --border: #253040;
+    --accent: #00d4aa;
+    --accent2: #ff6b47;
+    --accent3: #ffc947;
+    --warn: #ff4757;
+    --text: #e8edf5;
+    --muted: #7a90a8;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --purple: #a78bfa;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+
+  header {
+    background: linear-gradient(135deg,#0c0f14 0%,#131f2e 50%,#0d1a14 100%);
+    border-bottom:1px solid var(--border);
+    padding:2rem 2rem 1.5rem;
+    position:sticky; top:0; z-index:100;
+  }
+  header .tag { font-family:'IBM Plex Mono',monospace; font-size:.65rem; color:var(--accent); letter-spacing:.2em; text-transform:uppercase; margin-bottom:.3rem; }
+  header h1 { font-family:'DM Serif Display',serif; font-size:clamp(1.4rem,3vw,2rem); line-height:1.1; }
+  header h1 span { color:var(--accent); font-style:italic; }
+  header p.sub { font-size:.78rem; color:var(--muted); margin-top:.3rem; }
+
+  nav { display:flex; gap:.25rem; padding:.75rem 2rem; background:var(--surface); border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
+  nav::-webkit-scrollbar { display:none; }
+  nav button { font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.05em; color:var(--muted); background:transparent; border:1px solid transparent; border-radius:4px; padding:.45rem .9rem; cursor:pointer; white-space:nowrap; transition:all .2s; }
+  nav button:hover { color:var(--text); border-color:var(--border); }
+  nav button.active { color:var(--accent); border-color:var(--accent); background:rgba(0,212,170,.07); }
+
+  main { max-width:960px; margin:0 auto; padding:2rem; }
+
+  .section { display:none; animation:fadeIn .3s ease; }
+  .section.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .section-title { font-family:'DM Serif Display',serif; font-size:1.6rem; margin-bottom:.3rem; }
+  .section-title span { color:var(--accent); font-style:italic; }
+  .section-sub { font-size:.8rem; color:var(--muted); margin-bottom:1.5rem; font-family:'IBM Plex Mono',monospace; }
+
+  .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.2rem; transition:border-color .2s,transform .2s; }
+  .card:hover { border-color:var(--accent); transform:translateY(-2px); }
+  .card.warn { border-left:3px solid var(--warn); }
+  .card.go { border-left:3px solid var(--green); }
+  .card.caution { border-left:3px solid var(--accent3); }
+  .card.info { border-left:3px solid var(--blue); }
+  .card.purple { border-left:3px solid var(--purple); }
+  .card-label { font-family:'IBM Plex Mono',monospace; font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; margin-bottom:.5rem; }
+  .card.warn .card-label { color:var(--warn); }
+  .card.go .card-label { color:var(--green); }
+  .card.caution .card-label { color:var(--accent3); }
+  .card.info .card-label { color:var(--blue); }
+  .card.purple .card-label { color:var(--purple); }
+  .card h3 { font-size:.95rem; font-weight:600; margin-bottom:.5rem; }
+  .card p,.card li { font-size:.82rem; color:var(--muted); line-height:1.6; }
+  .card ul { padding-left:1rem; }
+  .card li { margin-bottom:.2rem; }
+
+  .accordion { margin-bottom:.75rem; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .accordion-header { background:var(--surface); padding:1rem 1.2rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background .2s; user-select:none; }
+  .accordion-header:hover { background:var(--surface2); }
+  .accordion-header h3 { font-size:.9rem; font-weight:600; display:flex; align-items:center; gap:.6rem; }
+  .accordion-header .step-num { font-family:'IBM Plex Mono',monospace; font-size:.65rem; color:var(--accent); background:rgba(0,212,170,.12); border:1px solid var(--accent); border-radius:3px; padding:.1rem .35rem; }
+  .accordion-chevron { font-size:1rem; color:var(--muted); transition:transform .3s; }
+  .accordion-header.open .accordion-chevron { transform:rotate(180deg); }
+  .accordion-body { display:none; padding:1.2rem; background:var(--surface2); font-size:.83rem; line-height:1.7; color:var(--muted); border-top:1px solid var(--border); }
+  .accordion-body.open { display:block; }
+  .accordion-body strong { color:var(--text); }
+  .accordion-body .tip { background:rgba(0,212,170,.08); border-left:3px solid var(--accent); padding:.6rem .8rem; margin:.8rem 0; border-radius:0 4px 4px 0; font-size:.8rem; color:var(--text); }
+  .accordion-body .warn-box { background:rgba(255,71,87,.08); border-left:3px solid var(--warn); padding:.6rem .8rem; margin:.8rem 0; border-radius:0 4px 4px 0; font-size:.8rem; color:#ffb3bb; }
+  .accordion-body ol,.accordion-body ul { padding-left:1.2rem; margin:.5rem 0; }
+  .accordion-body li { margin-bottom:.35rem; }
+
+  .problem-card { border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:.75rem; }
+  .problem-header { display:flex; align-items:center; gap:.75rem; padding:.9rem 1.2rem; background:var(--surface); cursor:pointer; transition:background .2s; user-select:none; }
+  .problem-header:hover { background:var(--surface2); }
+  .problem-icon { font-size:1.1rem; }
+  .problem-title { font-size:.9rem; font-weight:600; flex:1; }
+  .problem-badge { font-family:'IBM Plex Mono',monospace; font-size:.6rem; padding:.15rem .5rem; border-radius:3px; letter-spacing:.05em; }
+  .badge-common { background:rgba(255,201,71,.15); color:var(--accent3); border:1px solid rgba(255,201,71,.3); }
+  .badge-critical { background:rgba(255,71,87,.15); color:var(--warn); border:1px solid rgba(255,71,87,.3); }
+  .problem-body { display:none; padding:1.2rem; background:var(--surface2); border-top:1px solid var(--border); font-size:.83rem; color:var(--muted); line-height:1.7; }
+  .problem-body.open { display:block; }
+  .problem-body strong { color:var(--text); }
+  .solution-step { display:flex; gap:.75rem; margin-bottom:.5rem; align-items:flex-start; }
+  .solution-step .num { font-family:'IBM Plex Mono',monospace; font-size:.65rem; color:var(--accent); background:rgba(0,212,170,.1); border:1px solid rgba(0,212,170,.3); border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+
+  .csf-table { width:100%; border-collapse:collapse; font-size:.78rem; margin-bottom:1.5rem; }
+  .csf-table th { background:var(--surface2); color:var(--accent); font-family:'IBM Plex Mono',monospace; font-size:.63rem; letter-spacing:.1em; padding:.6rem .8rem; text-align:left; border-bottom:2px solid var(--border); }
+  .csf-table td { padding:.6rem .8rem; border-bottom:1px solid var(--border); color:var(--muted); vertical-align:top; }
+  .csf-table tr:hover td { background:var(--surface2); color:var(--text); }
+  .csf-table .normal { color:var(--green); font-weight:600; }
+  .csf-table .abnormal { color:var(--warn); font-weight:600; }
+  .csf-table .row-label { color:var(--text); font-weight:600; font-size:.82rem; }
+
+  .yt-link { display:inline-flex; align-items:center; gap:.5rem; background:rgba(255,0,0,.1); border:1px solid rgba(255,0,0,.3); color:#ff6b6b; text-decoration:none; font-family:'IBM Plex Mono',monospace; font-size:.7rem; padding:.35rem .7rem; border-radius:4px; margin-top:.8rem; transition:all .2s; }
+  .yt-link:hover { background:rgba(255,0,0,.2); }
+  .yt-link svg { width:14px; height:14px; fill:currentColor; }
+
+  .approach-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem; }
+  @media(max-width:600px){.approach-grid{grid-template-columns:1fr}}
+  .approach-card { border:2px solid var(--border); border-radius:10px; padding:1.2rem; cursor:pointer; transition:all .25s; background:var(--surface); position:relative; }
+  .approach-card:hover { border-color:var(--accent); background:var(--surface2); }
+  .approach-card.selected { border-color:var(--accent); background:rgba(0,212,170,.07); }
+  .approach-card .check { position:absolute; top:.6rem; right:.6rem; width:18px; height:18px; border-radius:50%; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:.6rem; transition:all .2s; }
+  .approach-card.selected .check { background:var(--accent); border-color:var(--accent); color:#000; }
+  .approach-card h3 { font-size:.9rem; font-weight:600; margin-bottom:.4rem; }
+  .approach-card p { font-size:.78rem; color:var(--muted); line-height:1.5; }
+  .approach-card .pros { margin-top:.7rem; }
+  .approach-card .pros span { display:inline-block; font-size:.68rem; padding:.15rem .45rem; border-radius:3px; margin:.15rem .15rem 0 0; background:rgba(34,197,94,.1); color:var(--green); border:1px solid rgba(34,197,94,.25); }
+
+  .checklist { display:flex; flex-direction:column; gap:.4rem; margin:1rem 0; }
+  .check-item { display:flex; align-items:flex-start; gap:.75rem; padding:.65rem .9rem; background:var(--surface); border:1px solid var(--border); border-radius:6px; cursor:pointer; transition:all .2s; user-select:none; }
+  .check-item:hover { border-color:var(--accent); }
+  .check-item.checked { background:rgba(0,212,170,.06); border-color:rgba(0,212,170,.3); }
+  .check-box { width:18px; height:18px; border:2px solid var(--border); border-radius:3px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:.75rem; margin-top:1px; transition:all .2s; }
+  .check-item.checked .check-box { background:var(--accent); border-color:var(--accent); color:#000; font-weight:700; }
+  .check-item span { font-size:.82rem; line-height:1.4; }
+  .check-item.checked span { color:var(--muted); text-decoration:line-through; }
+  .check-category { font-family:'IBM Plex Mono',monospace; font-size:.62rem; color:var(--accent); letter-spacing:.15em; text-transform:uppercase; margin:1rem 0 .4rem; }
+  .progress-bar { height:3px; background:var(--border); border-radius:2px; margin-bottom:1.5rem; }
+  .progress-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .4s ease; }
+
+  .divider { height:1px; background:var(--border); margin:1.5rem 0; }
+  .highlight-box { background:rgba(0,212,170,.06); border:1px solid rgba(0,212,170,.2); border-radius:8px; padding:1rem 1.2rem; margin-bottom:1rem; font-size:.83rem; line-height:1.7; }
+  .highlight-box strong { color:var(--accent); }
+  .warn-highlight { background:rgba(255,71,87,.06); border:1px solid rgba(255,71,87,.2); border-radius:8px; padding:1rem 1.2rem; margin-bottom:1rem; font-size:.83rem; line-height:1.7; color:#ffb3bb; }
+  .warn-highlight strong { color:var(--warn); }
+
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  @media(max-width:580px){.two-col{grid-template-columns:1fr}}
+
+  .badge { display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:.6rem; padding:.15rem .45rem; border-radius:3px; margin-left:.4rem; vertical-align:middle; }
+  .badge-red { background:rgba(255,71,87,.15); color:var(--warn); border:1px solid rgba(255,71,87,.3); }
+  .badge-green { background:rgba(34,197,94,.15); color:var(--green); border:1px solid rgba(34,197,94,.3); }
+  .badge-yellow { background:rgba(255,201,71,.15); color:var(--accent3); border:1px solid rgba(255,201,71,.3); }
+
+  /* ── ANATOMY DIAGRAM ── */
+  .anatomy-wrap { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem; }
+  @media(max-width:640px){.anatomy-wrap{grid-template-columns:1fr}}
+  .anatomy-box { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.2rem; }
+  .anatomy-box h4 { font-family:'IBM Plex Mono',monospace; font-size:.65rem; color:var(--accent); letter-spacing:.12em; text-transform:uppercase; margin-bottom:.8rem; }
+  .anatomy-box svg { width:100%; display:block; }
+
+  /* depth table */
+  .depth-table { width:100%; border-collapse:collapse; font-size:.78rem; margin-top:.8rem; }
+  .depth-table th { background:var(--surface2); color:var(--muted); font-family:'IBM Plex Mono',monospace; font-size:.62rem; padding:.5rem .7rem; text-align:left; border-bottom:1px solid var(--border); }
+  .depth-table td { padding:.5rem .7rem; border-bottom:1px solid var(--border); color:var(--muted); }
+  .depth-table .accent-td { color:var(--accent); font-weight:600; }
+
+  /* needle comparison */
+  .needle-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:.8rem; margin-bottom:1.2rem; }
+  .needle-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:1rem; transition:border-color .2s; }
+  .needle-card:hover { border-color:var(--accent); }
+  .needle-card .nc-label { font-family:'IBM Plex Mono',monospace; font-size:.6rem; color:var(--accent); letter-spacing:.1em; margin-bottom:.4rem; }
+  .needle-card h4 { font-size:.85rem; font-weight:600; margin-bottom:.4rem; }
+  .needle-card p { font-size:.77rem; color:var(--muted); line-height:1.5; }
+  .needle-card .tag-row { margin-top:.5rem; display:flex; flex-wrap:wrap; gap:.25rem; }
+  .needle-card .ntag { font-size:.62rem; padding:.1rem .35rem; border-radius:3px; }
+  .ntag-green { background:rgba(34,197,94,.1); color:var(--green); border:1px solid rgba(34,197,94,.25); }
+  .ntag-red { background:rgba(255,71,87,.1); color:var(--warn); border:1px solid rgba(255,71,87,.25); }
+  .ntag-blue { background:rgba(59,130,246,.1); color:var(--blue); border:1px solid rgba(59,130,246,.25); }
+
+  /* complication timeline */
+  .timeline { position:relative; padding-left:1.5rem; margin:1rem 0; }
+  .timeline::before { content:''; position:absolute; left:6px; top:0; bottom:0; width:1px; background:var(--border); }
+  .tl-item { position:relative; margin-bottom:1rem; }
+  .tl-item::before { content:''; position:absolute; left:-1.2rem; top:.35rem; width:8px; height:8px; border-radius:50%; background:var(--border); border:2px solid var(--surface); }
+  .tl-item.warn-tl::before { background:var(--warn); }
+  .tl-item.caution-tl::before { background:var(--accent3); }
+  .tl-item.info-tl::before { background:var(--blue); }
+  .tl-time { font-family:'IBM Plex Mono',monospace; font-size:.62rem; color:var(--muted); letter-spacing:.05em; margin-bottom:.2rem; }
+  .tl-title { font-size:.85rem; font-weight:600; margin-bottom:.2rem; }
+  .tl-desc { font-size:.78rem; color:var(--muted); line-height:1.5; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">Emergency Medicine · Neurology Procedures · v2</div>
+  <h1>Lumbar Puncture <span>&amp; CSF Analysis</span></h1>
+  <p class="sub">Clinical reference for ER physicians — indications, technique, troubleshooting, interpretation</p>
+</header>
+
+<nav>
+  <button class="active" onclick="showSection('indications',this)">Indications</button>
+  <button onclick="showSection('contraindications',this)">Contraindications</button>
+  <button onclick="showSection('approach',this)">Approach</button>
+  <button onclick="showSection('needles',this)">Needles</button>
+  <button onclick="showSection('prep',this)">Prep &amp; Setup</button>
+  <button onclick="showSection('technique',this)">Technique</button>
+  <button onclick="showSection('troubleshoot',this)">Troubleshooting</button>
+  <button onclick="showSection('complications',this)">Complications</button>
+  <button onclick="showSection('csf',this)">CSF Interpretation</button>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════ INDICATIONS ═══════════════════════════════ -->
+<div id="indications" class="section active">
+  <div class="section-title">Indications for <span>Lumbar Puncture</span></div>
+  <div class="section-sub">// When to tap in the emergency setting</div>
+
+  <div class="highlight-box">
+    <strong>Clinical Rule:</strong> Any patient with suspected meningitis/encephalitis who is not CT-contraindicated should have LP performed <strong>as early as possible</strong>. Do not delay antibiotics for LP if CT is required — start empirical treatment first, then tap when safe.
+  </div>
+
+  <div class="cards">
+    <div class="card go">
+      <div class="card-label">🚨 Urgent / Emergency</div>
+      <h3>Meningitis / Encephalitis</h3>
+      <ul>
+        <li>Bacterial meningitis (fever + neck stiffness + AMS)</li>
+        <li>Viral encephalitis (HSV, EBV, arbovirus)</li>
+        <li>Fungal meningitis (cryptococcus — immunocompromised)</li>
+        <li>TB meningitis</li>
+        <li>Neurosyphilis</li>
+      </ul>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=bacterial+meningitis+lumbar+puncture+emergency" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        Watch: Meningitis LP
+      </a>
+    </div>
+    <div class="card go">
+      <div class="card-label">🩸 Hemorrhagic</div>
+      <h3>Subarachnoid Hemorrhage</h3>
+      <ul>
+        <li>CT negative but thunderclap headache</li>
+        <li>LP at ≥6 hours post-onset to detect xanthochromia</li>
+        <li>"Worst headache of life" / sentinel headache</li>
+        <li>Ottawa SAH Rule positive</li>
+      </ul>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=xanthochromia+CSF+subarachnoid+hemorrhage+lumbar+puncture" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        Watch: SAH Diagnosis
+      </a>
+    </div>
+    <div class="card info">
+      <div class="card-label">🧠 Neurological</div>
+      <h3>CNS Conditions</h3>
+      <ul>
+        <li>IIH — diagnostic &amp; therapeutic drainage</li>
+        <li>Guillain-Barré syndrome (albuminocytologic dissociation)</li>
+        <li>Multiple sclerosis — oligoclonal bands</li>
+        <li>Normal pressure hydrocephalus</li>
+        <li>Neurosarcoidosis / leptomeningeal mets</li>
+        <li>NMDA-receptor encephalitis</li>
+      </ul>
+    </div>
+    <div class="card info">
+      <div class="card-label">💉 Therapeutic</div>
+      <h3>Therapeutic Indications</h3>
+      <ul>
+        <li>Intrathecal chemotherapy / antibiotics</li>
+        <li>Spinal anaesthesia (anaesthesiologist domain)</li>
+        <li>Therapeutic CSF drainage in IIH</li>
+        <li>Epidural steroid injection (adjacent)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <strong>Ottawa SAH Rule:</strong> LP indicated in headache reaching maximum intensity in &lt;1 hour + any of: age ≥40, neck pain/stiffness, witnessed LOC, onset with exertion, thunderclap, limited neck flexion on exam.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CONTRAINDICATIONS ═══════════════════════════════ -->
+<div id="contraindications" class="section">
+  <div class="section-title"><span>Contra</span>indications</div>
+  <div class="section-sub">// Know when NOT to tap — safety is non-negotiable</div>
+
+  <div class="cards">
+    <div class="card warn">
+      <div class="card-label">⛔ Absolute</div>
+      <h3>DO NOT Proceed</h3>
+      <ul>
+        <li><strong>Signs of raised ICP with mass effect:</strong> papilloedema, unequal pupils, decerebrate/decorticate posturing</li>
+        <li><strong>CT findings:</strong> midline shift, effaced cisterns, posterior fossa mass, obstructive hydrocephalus</li>
+        <li><strong>Skin infection</strong> at planned entry site (cellulitis, abscess)</li>
+        <li><strong>Spinal epidural abscess</strong> at entry level</li>
+        <li><strong>Coagulopathy:</strong> INR &gt;1.4, platelets &lt;50k, active therapeutic anticoagulation</li>
+      </ul>
+    </div>
+    <div class="card caution">
+      <div class="card-label">⚠️ Relative — Risk/Benefit</div>
+      <h3>Proceed with Caution</h3>
+      <ul>
+        <li>Platelets 50–100k: consider transfusion first</li>
+        <li>Anticoagulants: follow bridge protocol</li>
+        <li>Known spinal tumour at entry level</li>
+        <li>Severe lumbar spondylosis (consider fluoroscopy-guided)</li>
+        <li>Prior lumbar surgery at level</li>
+        <li>Agitated / uncooperative patient — consider sedation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title" style="font-size:1.1rem;margin-bottom:.8rem">CT <span>Before</span> LP Decision</div>
+  <div class="cards">
+    <div class="card warn">
+      <div class="card-label">🔬 CT First — Any 1 = Scan First</div>
+      <h3>Do CT Before LP If:</h3>
+      <ul>
+        <li>New-onset seizure</li>
+        <li>Immunocompromised (HIV, transplant, steroids)</li>
+        <li>Known or suspected CNS lesion</li>
+        <li>Focal neurological deficit</li>
+        <li>Altered consciousness (GCS &lt;15)</li>
+        <li>Papilloedema on fundoscopy</li>
+      </ul>
+      <div style="margin-top:.8rem;font-size:.75rem;color:var(--warn)">⚠️ No CT available + bacterial meningitis likely → start antibiotics + dexamethasone first, CT when available</div>
+    </div>
+    <div class="card go">
+      <div class="card-label">✅ May Skip CT If All Normal:</div>
+      <h3>Go Directly to LP</h3>
+      <ul>
+        <li>Age &lt;60, immunocompetent</li>
+        <li>No papilloedema</li>
+        <li>No focal neurological deficit</li>
+        <li>GCS 15 / normal consciousness</li>
+        <li>No new-onset seizure</li>
+      </ul>
+      <div style="margin-top:.8rem;font-size:.75rem;color:var(--green)">✅ All 5 criteria met → LP without CT</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ APPROACH ═══════════════════════════════ -->
+<div id="approach" class="section">
+  <div class="section-title">Choosing the <span>Approach</span></div>
+  <div class="section-sub">// Anatomy, positioning, landmark identification</div>
+
+  <!-- ── REVISED ANATOMY DIAGRAMS ── -->
+  <div class="anatomy-wrap">
+
+    <!-- SAGITTAL SPINE DIAGRAM -->
+    <div class="anatomy-box">
+      <h4>// Sagittal View — Level Selection</h4>
+      <svg viewBox="0 0 320 430" xmlns="http://www.w3.org/2000/svg" style="max-height:430px">
+        <defs>
+          <!-- Vertebral body gradient — blue-grey bone look -->
+          <linearGradient id="vbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#2a4060"/>
+            <stop offset="50%" stop-color="#1e3050"/>
+            <stop offset="100%" stop-color="#162840"/>
+          </linearGradient>
+          <!-- Highlighted vertebra (L3/L4) -->
+          <linearGradient id="vbHighGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0d3030"/>
+            <stop offset="100%" stop-color="#082020"/>
+          </linearGradient>
+          <!-- Disc gradient — gelatinous look -->
+          <linearGradient id="discGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1e3848"/>
+            <stop offset="100%" stop-color="#0f2030"/>
+          </linearGradient>
+          <!-- Spinal cord gradient -->
+          <linearGradient id="cordGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#e05030" stop-opacity=".85"/>
+            <stop offset="100%" stop-color="#c04020" stop-opacity=".55"/>
+          </linearGradient>
+          <!-- CSF space gradient -->
+          <linearGradient id="csfGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#1a4080" stop-opacity=".5"/>
+            <stop offset="100%" stop-color="#1a5090" stop-opacity=".3"/>
+          </linearGradient>
+          <!-- Ligament gradient -->
+          <linearGradient id="ligGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#2a5030"/>
+            <stop offset="100%" stop-color="#1a3820"/>
+          </linearGradient>
+          <!-- Dura gradient -->
+          <linearGradient id="duraGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#6a2010"/>
+            <stop offset="100%" stop-color="#4a1808"/>
+          </linearGradient>
+          <!-- Skin/soft tissue gradient -->
+          <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#3a2010" stop-opacity=".6"/>
+            <stop offset="100%" stop-color="#251508" stop-opacity=".4"/>
+          </linearGradient>
+          <!-- Needle gradient -->
+          <linearGradient id="needleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#7ab0f0"/>
+            <stop offset="100%" stop-color="#3b82f6"/>
+          </linearGradient>
+          <!-- Glow filter -->
+          <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+          <filter id="softGlow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+          <marker id="arrowBlue2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+            <polygon points="0 0, 7 3.5, 0 7" fill="#3b82f6"/>
+          </marker>
+          <marker id="arrowTeal" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+            <polygon points="0 0, 7 3.5, 0 7" fill="#00d4aa"/>
+          </marker>
+        </defs>
+
+        <!-- ── Background / skin tissue ── -->
+        <rect x="0" y="0" width="320" height="430" fill="#0c0f14" rx="6"/>
+
+        <!-- Posterior soft tissue (skin + subcutaneous fat) -->
+        <rect x="175" y="0" width="145" height="430" rx="0" fill="url(#skinGrad)" opacity=".5"/>
+        <text x="247" y="14" fill="#6a4828" font-size="7.5" font-family="monospace" text-anchor="middle" opacity=".8">Posterior soft tissue</text>
+
+        <!-- ── SPINAL CANAL ── -->
+        <!-- Canal background (CSF-filled) -->
+        <rect x="110" y="20" width="26" height="360" rx="5" fill="url(#csfGrad)" stroke="#1a4580" stroke-width="1"/>
+
+        <!-- Dura mater (two parallel lines flanking canal) -->
+        <rect x="109" y="20" width="3" height="360" rx="1" fill="url(#duraGrad)" opacity=".9"/>
+        <rect x="133" y="20" width="3" height="360" rx="1" fill="url(#duraGrad)" opacity=".9"/>
+
+        <!-- Spinal cord T12–L1/L2 -->
+        <rect x="114" y="20" width="18" height="80" rx="4" fill="url(#cordGrad)"/>
+        <!-- Cord shading highlight -->
+        <rect x="115" y="22" width="5" height="76" rx="3" fill="rgba(255,120,80,.15)"/>
+        <!-- Conus medullaris tip (teardrop) -->
+        <ellipse cx="123" cy="102" rx="9" ry="7" fill="#e05030" opacity=".75"/>
+        <polygon points="114,100 132,100 123,118" fill="#c04020" opacity=".8"/>
+        <!-- Conus highlight -->
+        <ellipse cx="120" cy="100" rx="3" ry="2.5" fill="rgba(255,150,100,.3)"/>
+
+        <!-- Cauda equina nerve roots — fanning out from conus -->
+        <line x1="119" y1="115" x2="116" y2="340" stroke="#e07050" stroke-width=".9" opacity=".55" stroke-dasharray="3,2"/>
+        <line x1="121" y1="115" x2="119" y2="340" stroke="#e07050" stroke-width=".9" opacity=".45" stroke-dasharray="3,2"/>
+        <line x1="123" y1="115" x2="123" y2="340" stroke="#e07050" stroke-width=".9" opacity=".45" stroke-dasharray="3,2"/>
+        <line x1="125" y1="115" x2="127" y2="340" stroke="#e07050" stroke-width=".9" opacity=".45" stroke-dasharray="3,2"/>
+        <line x1="127" y1="115" x2="130" y2="340" stroke="#e07050" stroke-width=".9" opacity=".55" stroke-dasharray="3,2"/>
+
+        <!-- ── VERTEBRAL BODIES (anatomically shaped) ── -->
+        <!-- Helper: each VB is a rounded rect, posterior arch is the canal section,
+             spinous process projects posteriorly (right side) -->
+
+        <!-- T12 -->
+        <rect x="55" y="18" width="55" height="24" rx="4" fill="url(#vbGrad)" stroke="#3a5878" stroke-width="1.2"/>
+        <!-- posterior arch -->
+        <rect x="110" y="20" width="26" height="20" rx="2" fill="#0d1e30" stroke="#253a50" stroke-width=".8"/>
+        <!-- spinous process T12 (posterior projection) -->
+        <path d="M136,22 Q155,28 158,30 Q155,32 136,38 Z" fill="#1a3050" stroke="#3a5878" stroke-width=".8"/>
+        <!-- laminae -->
+        <path d="M136,22 Q145,25 148,30 Q145,35 136,38" fill="none" stroke="#3a5878" stroke-width=".8"/>
+        <text x="50" y="33" fill="#7a90a8" font-size="9" font-family="monospace" text-anchor="end" font-weight="500">T12</text>
+
+        <!-- T12–L1 disc -->
+        <rect x="58" y="42" width="49" height="9" rx="2" fill="url(#discGrad)" stroke="#1a3040" stroke-width=".7"/>
+        <rect x="61" y="43" width="43" height="7" rx="1.5" fill="rgba(30,80,100,.4)"/>
+
+        <!-- L1 -->
+        <rect x="55" y="51" width="55" height="26" rx="4" fill="url(#vbGrad)" stroke="#3a5878" stroke-width="1.2"/>
+        <rect x="110" y="53" width="26" height="22" rx="2" fill="#0d1e30" stroke="#253a50" stroke-width=".8"/>
+        <path d="M136,54 Q158,61 162,64 Q158,67 136,73 Z" fill="#1a3050" stroke="#3a5878" stroke-width=".8"/>
+        <text x="50" y="67" fill="#7a90a8" font-size="9" font-family="monospace" text-anchor="end" font-weight="500">L1</text>
+        <!-- Conus label callout -->
+        <line x1="162" y1="63" x2="190" y2="63" stroke="#e05030" stroke-width=".8" stroke-dasharray="3,2"/>
+        <circle cx="162" cy="63" r="2" fill="#e05030" opacity=".8"/>
+        <text x="192" y="60" fill="#e05030" font-size="7.5" font-family="monospace" font-weight="bold">Conus ends</text>
+        <text x="192" y="69" fill="#e05030" font-size="7.5" font-family="monospace">~L1–L2</text>
+
+        <!-- L1–L2 disc -->
+        <rect x="58" y="77" width="49" height="9" rx="2" fill="url(#discGrad)" stroke="#1a3040" stroke-width=".7"/>
+        <rect x="61" y="78" width="43" height="7" rx="1.5" fill="rgba(30,80,100,.4)"/>
+
+        <!-- L2 -->
+        <rect x="55" y="86" width="55" height="26" rx="4" fill="url(#vbGrad)" stroke="#3a5878" stroke-width="1.2"/>
+        <rect x="110" y="88" width="26" height="22" rx="2" fill="#0d1e30" stroke="#253a50" stroke-width=".8"/>
+        <path d="M136,89 Q158,96 162,99 Q158,102 136,107 Z" fill="#1a3050" stroke="#3a5878" stroke-width=".8"/>
+        <text x="50" y="102" fill="#7a90a8" font-size="9" font-family="monospace" text-anchor="end" font-weight="500">L2</text>
+
+        <!-- L2–L3 disc -->
+        <rect x="58" y="112" width="49" height="9" rx="2" fill="url(#discGrad)" stroke="#1a3040" stroke-width=".7"/>
+        <rect x="61" y="113" width="43" height="7" rx="1.5" fill="rgba(30,80,100,.4)"/>
+
+        <!-- L3 — highlighted -->
+        <rect x="52" y="121" width="58" height="28" rx="4" fill="url(#vbHighGrad)" stroke="#00d4aa" stroke-width="1.8"/>
+        <!-- subtle inner highlight -->
+        <rect x="54" y="123" width="54" height="24" rx="3" fill="rgba(0,212,170,.04)"/>
+        <rect x="110" y="123" width="26" height="24" rx="2" fill="#061614" stroke="#00d4aa" stroke-width="1"/>
+        <path d="M136,124 Q162,132 166,135 Q162,138 136,144 Z" fill="#082020" stroke="#00d4aa" stroke-width="1"/>
+        <text x="47" y="138" fill="#00d4aa" font-size="9.5" font-family="monospace" text-anchor="end" font-weight="bold">L3</text>
+
+        <!-- L3–L4 interspace — PREFERRED — glowing band -->
+        <rect x="40" y="149" width="128" height="12" rx="3" fill="rgba(0,212,170,.12)" stroke="rgba(0,212,170,.7)" stroke-width="1.2" stroke-dasharray="5,3" filter="url(#glow)"/>
+        <!-- label -->
+        <text x="192" y="156" fill="#00d4aa" font-size="8" font-family="monospace" font-weight="bold">← PREFERRED ★</text>
+        <line x1="191" y1="155" x2="169" y2="155" stroke="#00d4aa" stroke-width=".8"/>
+
+        <!-- L4 — highlighted -->
+        <rect x="52" y="161" width="58" height="28" rx="4" fill="url(#vbHighGrad)" stroke="#00d4aa" stroke-width="1.8"/>
+        <rect x="54" y="163" width="54" height="24" rx="3" fill="rgba(0,212,170,.04)"/>
+        <rect x="110" y="163" width="26" height="24" rx="2" fill="#061614" stroke="#00d4aa" stroke-width="1"/>
+        <path d="M136,164 Q162,172 166,175 Q162,178 136,184 Z" fill="#082020" stroke="#00d4aa" stroke-width="1"/>
+        <text x="47" y="178" fill="#00d4aa" font-size="9.5" font-family="monospace" text-anchor="end" font-weight="bold">L4</text>
+
+        <!-- TUFFIER'S LINE — prominent -->
+        <line x1="18" y1="175" x2="305" y2="175" stroke="#ffc947" stroke-width="1.2" stroke-dasharray="6,3" opacity=".85"/>
+        <!-- PSIS triangles -->
+        <polygon points="22,170 30,175 22,180" fill="#ffc947" opacity=".8"/>
+        <polygon points="298,170 290,175 298,180" fill="#ffc947" opacity=".8"/>
+        <text x="160" y="170" fill="#ffc947" font-size="7.5" font-family="monospace" text-anchor="middle" font-weight="bold">Tuffier's Line (PSIS–PSIS)</text>
+
+        <!-- L4–L5 disc + interspace (alternate) -->
+        <rect x="58" y="189" width="49" height="9" rx="2" fill="url(#discGrad)" stroke="#1a3040" stroke-width=".7"/>
+        <rect x="61" y="190" width="43" height="7" rx="1.5" fill="rgba(30,80,100,.4)"/>
+        <!-- L4–L5 interspace band (alternate) -->
+        <rect x="40" y="189" width="128" height="9" rx="2" fill="rgba(0,212,170,.05)" stroke="rgba(0,212,170,.3)" stroke-width=".8" stroke-dasharray="3,3"/>
+        <text x="192" y="195" fill="#7a90a8" font-size="7.5" font-family="monospace">← alternative</text>
+
+        <!-- L5 -->
+        <rect x="55" y="198" width="55" height="26" rx="4" fill="url(#vbGrad)" stroke="#3a5878" stroke-width="1.2"/>
+        <rect x="110" y="200" width="26" height="22" rx="2" fill="#0d1e30" stroke="#253a50" stroke-width=".8"/>
+        <path d="M136,201 Q158,208 161,211 Q158,214 136,219 Z" fill="#1a3050" stroke="#3a5878" stroke-width=".8"/>
+        <text x="50" y="214" fill="#7a90a8" font-size="9" font-family="monospace" text-anchor="end">L5</text>
+
+        <!-- L5–S1 disc -->
+        <rect x="58" y="224" width="49" height="8" rx="2" fill="url(#discGrad)" stroke="#1a3040" stroke-width=".7"/>
+
+        <!-- Sacrum — wedge-shaped -->
+        <path d="M55,232 Q55,285 75,290 L113,290 Q113,232 113,232 Z" fill="url(#vbGrad)" stroke="#3a5878" stroke-width="1.2"/>
+        <rect x="110" y="232" width="26" height="58" rx="0" fill="#0d1e30" stroke="#253a50" stroke-width=".8"/>
+        <text x="84" y="265" fill="#7a90a8" font-size="8.5" font-family="monospace" text-anchor="middle">Sacrum</text>
+        <!-- sacral foramina hint -->
+        <ellipse cx="76" cy="250" rx="4" ry="3" fill="none" stroke="#3a5878" stroke-width=".7"/>
+        <ellipse cx="76" cy="262" rx="4" ry="3" fill="none" stroke="#3a5878" stroke-width=".7"/>
+        <ellipse cx="76" cy="274" rx="3.5" ry="2.5" fill="none" stroke="#3a5878" stroke-width=".7"/>
+
+        <!-- ── Ligamentum flavum overlays at interspace level ── -->
+        <!-- At L3–L4 -->
+        <rect x="136" y="149" width="5" height="12" rx="1" fill="#4a8020" opacity=".85"/>
+        <text x="143" y="157" fill="#80b030" font-size="7" font-family="monospace">Lig. flavum</text>
+        <!-- At L4–L5 -->
+        <rect x="136" y="189" width="5" height="9" rx="1" fill="#4a8020" opacity=".7"/>
+
+        <!-- ── NEEDLE ── (entering at L3–L4, angled slightly cephalad) -->
+        <!-- Needle shaft -->
+        <line x1="8" y1="158" x2="111" y2="155" stroke="url(#needleGrad)" stroke-width="3" stroke-linecap="round"/>
+        <!-- Needle highlight -->
+        <line x1="8" y1="157" x2="111" y2="154" stroke="rgba(160,200,255,.35)" stroke-width="1" stroke-linecap="round"/>
+        <!-- Needle tip arrow -->
+        <polygon points="111,152 120,155 111,158" fill="#3b82f6"/>
+        <!-- Hub -->
+        <rect x="4" y="154" width="8" height="8" rx="2" fill="#2a3a60" stroke="#3b82f6" stroke-width="1"/>
+        <text x="4" y="150" fill="#3b82f6" font-size="7.5" font-family="monospace" font-weight="bold">Needle</text>
+        <text x="4" y="169" fill="#3b82f6" font-size="7" font-family="monospace">→ L3–L4</text>
+
+        <!-- ── LEGEND ── -->
+        <rect x="8" y="320" width="130" height="100" rx="5" fill="rgba(0,0,0,.4)" stroke="#253040" stroke-width=".8"/>
+        <text x="14" y="334" fill="#7a90a8" font-size="7" font-family="monospace" font-weight="bold">LEGEND</text>
+        <!-- cord -->
+        <rect x="14" y="339" width="12" height="6" rx="1" fill="#e05030" opacity=".8"/>
+        <text x="30" y="345" fill="#c08060" font-size="7" font-family="monospace">Spinal cord / cauda equina</text>
+        <!-- CSF -->
+        <rect x="14" y="349" width="12" height="6" rx="1" fill="rgba(59,130,246,.4)" stroke="#1a4580" stroke-width=".8"/>
+        <text x="30" y="355" fill="#7a90a8" font-size="7" font-family="monospace">CSF / subarachnoid space</text>
+        <!-- Dura -->
+        <rect x="14" y="359" width="12" height="6" rx="1" fill="#6a2010"/>
+        <text x="30" y="365" fill="#7a90a8" font-size="7" font-family="monospace">Dura mater</text>
+        <!-- disc -->
+        <rect x="14" y="369" width="12" height="6" rx="1" fill="url(#discGrad)" stroke="#1a3040" stroke-width=".5"/>
+        <text x="30" y="375" fill="#7a90a8" font-size="7" font-family="monospace">Intervertebral disc</text>
+        <!-- lig flavum -->
+        <rect x="14" y="379" width="12" height="6" rx="1" fill="#4a8020" opacity=".85"/>
+        <text x="30" y="385" fill="#7a90a8" font-size="7" font-family="monospace">Ligamentum flavum</text>
+        <!-- preferred -->
+        <rect x="14" y="389" width="12" height="6" rx="2" fill="rgba(0,212,170,.15)" stroke="rgba(0,212,170,.7)" stroke-width=".8"/>
+        <text x="30" y="395" fill="#00d4aa" font-size="7" font-family="monospace">Preferred interspace</text>
+
+        <!-- Tuffier label at bottom -->
+        <text x="160" y="420" fill="#ffc947" font-size="7" font-family="monospace" text-anchor="middle" opacity=".7">★ Tuffier's line crosses L4 spinous process or L4–L5</text>
+      </svg>
+      <p style="font-size:.72rem;color:var(--muted);margin-top:.5rem;text-align:center">Conus medullaris terminates L1–L2. Safe LP at L3–L4 (preferred) or L4–L5. Red = spinal cord + cauda equina.</p>
+    </div>
+
+    <!-- AXIAL CROSS-SECTION -->
+    <div class="anatomy-box">
+      <h4>// Axial Cross-Section — Needle Layers</h4>
+      <svg viewBox="0 0 320 350" xmlns="http://www.w3.org/2000/svg" style="max-height:350px">
+        <defs>
+          <!-- Radial gradients for each tissue ring -->
+          <radialGradient id="bgRadial" cx="50%" cy="50%">
+            <stop offset="0%" stop-color="#0c0f14"/>
+            <stop offset="100%" stop-color="#080a0e"/>
+          </radialGradient>
+          <!-- Skin/fat -->
+          <radialGradient id="skinRad" cx="40%" cy="40%">
+            <stop offset="0%" stop-color="#4a2e14" stop-opacity=".85"/>
+            <stop offset="100%" stop-color="#2a1808" stop-opacity=".6"/>
+          </radialGradient>
+          <!-- Subcutaneous fat -->
+          <radialGradient id="fatRad" cx="40%" cy="40%">
+            <stop offset="0%" stop-color="#2a3848" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#1a2838" stop-opacity=".75"/>
+          </radialGradient>
+          <!-- Supraspinous lig -->
+          <radialGradient id="supraRad" cx="40%" cy="40%">
+            <stop offset="0%" stop-color="#204848" stop-opacity=".95"/>
+            <stop offset="100%" stop-color="#183838" stop-opacity=".85"/>
+          </radialGradient>
+          <!-- Interspinous lig -->
+          <radialGradient id="interRad" cx="40%" cy="40%">
+            <stop offset="0%" stop-color="#1a5038" stop-opacity=".95"/>
+            <stop offset="100%" stop-color="#103020" stop-opacity=".85"/>
+          </radialGradient>
+          <!-- Lig. flavum — distinctly green-yellow -->
+          <radialGradient id="flavRad" cx="40%" cy="40%">
+            <stop offset="0%" stop-color="#506018" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#303808" stop-opacity=".9"/>
+          </radialGradient>
+          <!-- Epidural -->
+          <radialGradient id="epidRad" cx="50%" cy="50%">
+            <stop offset="0%" stop-color="#102838" stop-opacity=".5"/>
+            <stop offset="100%" stop-color="#0a1828" stop-opacity=".3"/>
+          </radialGradient>
+          <!-- Dura -->
+          <radialGradient id="duraRad" cx="40%" cy="40%">
+            <stop offset="0%" stop-color="#782818" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#501808" stop-opacity=".9"/>
+          </radialGradient>
+          <!-- Arachnoid + CSF -->
+          <radialGradient id="csfRad" cx="50%" cy="50%">
+            <stop offset="0%" stop-color="#204888" stop-opacity=".45"/>
+            <stop offset="100%" stop-color="#102858" stop-opacity=".25"/>
+          </radialGradient>
+          <!-- Spinal cord gray matter -->
+          <radialGradient id="cordGrayRad" cx="50%" cy="50%">
+            <stop offset="0%" stop-color="#d05030" stop-opacity=".75"/>
+            <stop offset="100%" stop-color="#902010" stop-opacity=".6"/>
+          </radialGradient>
+          <!-- Spinal cord white matter outer -->
+          <radialGradient id="cordWhiteRad" cx="40%" cy="40%">
+            <stop offset="0%" stop-color="#b04020" stop-opacity=".55"/>
+            <stop offset="100%" stop-color="#701808" stop-opacity=".4"/>
+          </radialGradient>
+          <!-- Needle gradient -->
+          <linearGradient id="needleAxGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#90c0f8"/>
+            <stop offset="50%" stop-color="#3b82f6"/>
+            <stop offset="100%" stop-color="#1a50c0"/>
+          </linearGradient>
+          <!-- Glow filter -->
+          <filter id="layerGlow">
+            <feGaussianBlur stdDeviation="1.5" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+          <filter id="needleGlowAx">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+          <!-- Arrow marker -->
+          <marker id="arrowNx" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+            <polygon points="0 0,7 3.5,0 7" fill="#3b82f6"/>
+          </marker>
+        </defs>
+
+        <!-- Background -->
+        <rect x="0" y="0" width="320" height="350" fill="#0c0f14" rx="6"/>
+
+        <!-- Midline guide (vertical) -->
+        <line x1="148" y1="8" x2="148" y2="295" stroke="#1e2e40" stroke-width=".8" stroke-dasharray="4,4"/>
+        <text x="150" y="16" fill="#2e4860" font-size="7" font-family="monospace">midline</text>
+
+        <!-- ── LAYER 1: Skin (outermost) ── -->
+        <ellipse cx="148" cy="155" rx="130" ry="118" fill="url(#skinRad)" stroke="#7a4020" stroke-width="8" opacity=".75"/>
+
+        <!-- ── LAYER 2: Subcutaneous fat ── -->
+        <ellipse cx="148" cy="155" rx="114" ry="100" fill="url(#fatRad)" stroke="#2a4060" stroke-width="9" opacity=".8"/>
+
+        <!-- ── LAYER 3: Supraspinous ligament ── -->
+        <ellipse cx="148" cy="155" rx="97" ry="83" fill="url(#supraRad)" stroke="#206858" stroke-width="8" opacity=".9"/>
+
+        <!-- ── LAYER 4: Interspinous ligament ── -->
+        <ellipse cx="148" cy="155" rx="81" ry="68" fill="url(#interRad)" stroke="#206840" stroke-width="7" opacity=".9"/>
+
+        <!-- ── LAYER 5: Ligamentum flavum (distinctive yellow-green) ── -->
+        <ellipse cx="148" cy="155" rx="66" ry="54" fill="url(#flavRad)" stroke="#90b030" stroke-width="7" opacity=".95"/>
+
+        <!-- ── LAYER 6: Epidural space ── -->
+        <ellipse cx="148" cy="155" rx="52" ry="41" fill="url(#epidRad)" stroke="#204860" stroke-width="5" opacity=".85"/>
+
+        <!-- ── LAYER 7: Dura mater (thick, reddish-brown) ── -->
+        <ellipse cx="148" cy="155" rx="43" ry="33" fill="url(#duraRad)" stroke="#a03820" stroke-width="5" opacity=".95"/>
+
+        <!-- ── LAYER 8: Arachnoid + subarachnoid / CSF (blue) ── -->
+        <ellipse cx="148" cy="155" rx="34" ry="25" fill="url(#csfRad)" stroke="#3a6aaa" stroke-width="3" opacity=".95"/>
+        <!-- Arachnoid inner dashed border -->
+        <ellipse cx="148" cy="155" rx="28" ry="19" fill="rgba(30,60,120,.1)" stroke="#2a5090" stroke-width="1" stroke-dasharray="2,2"/>
+
+        <!-- ── SPINAL CORD (axial cross-section) ── -->
+        <!-- White matter -->
+        <ellipse cx="148" cy="155" rx="18" ry="14" fill="url(#cordWhiteRad)"/>
+        <!-- Gray matter H-shape (simplified as two overlapping ellipses) -->
+        <ellipse cx="148" cy="152" rx="10" ry="7" fill="url(#cordGrayRad)"/>
+        <ellipse cx="148" cy="158" rx="10" ry="7" fill="url(#cordGrayRad)"/>
+        <!-- Central canal dot -->
+        <circle cx="148" cy="155" r="2.5" fill="#d06040" opacity=".9"/>
+        <!-- Cord highlight -->
+        <ellipse cx="144" cy="151" rx="4" ry="3" fill="rgba(255,160,120,.15)"/>
+        <text x="148" y="160" fill="#e07050" font-size="6.5" font-family="monospace" text-anchor="middle" font-weight="bold">Cord</text>
+
+        <!-- ── NEEDLE (entering from left) ── -->
+        <!-- Needle shaft body -->
+        <rect x="8" y="153" width="86" height="4" rx="2" fill="url(#needleAxGrad)"/>
+        <!-- Needle inner channel (stylet lumen) -->
+        <rect x="10" y="154.5" width="80" height="1" rx=".5" fill="rgba(200,230,255,.3)"/>
+        <!-- Needle highlight -->
+        <rect x="10" y="153.2" width="82" height="1.2" rx=".6" fill="rgba(200,230,255,.4)"/>
+        <!-- Needle tip (bevel) -->
+        <polygon points="94,153 104,155 94,159" fill="#5a9af6" stroke="#3b82f6" stroke-width=".5"/>
+        <!-- Hub end -->
+        <rect x="4" y="150" width="7" height="10" rx="2" fill="#1a2a50" stroke="#3b82f6" stroke-width="1"/>
+
+        <!-- ── POP markers ── -->
+        <!-- Pop 1 — lig. flavum -->
+        <circle cx="82" cy="155" r="5.5" fill="none" stroke="#90b030" stroke-width="1.5" filter="url(#layerGlow)"/>
+        <circle cx="82" cy="155" r="5.5" fill="rgba(144,176,48,.08)"/>
+        <!-- Pop 2 — dura -->
+        <circle cx="105" cy="155" r="5" fill="none" stroke="#a03820" stroke-width="1.5" filter="url(#layerGlow)"/>
+        <circle cx="105" cy="155" r="5" fill="rgba(160,56,32,.08)"/>
+
+        <!-- ── LABEL LINES (right side) ── -->
+        <!-- Each label line uses a connector from the ring edge -->
+
+        <!-- 1. Skin -->
+        <line x1="260" y1="42" x2="248" y2="57" stroke="#7a4020" stroke-width=".7"/>
+        <circle cx="260" cy="42" r="2" fill="#7a4020" opacity=".6"/>
+        <text x="263" y="38" fill="#a06030" font-size="7.5" font-family="monospace" font-weight="bold">1. Skin</text>
+
+        <!-- 2. Subcutaneous fat -->
+        <line x1="262" y1="58" x2="248" y2="70" stroke="#3a5878" stroke-width=".7"/>
+        <circle cx="262" cy="58" r="2" fill="#3a5878" opacity=".6"/>
+        <text x="265" y="54" fill="#5a7898" font-size="7.5" font-family="monospace">2. Subcut. fat</text>
+
+        <!-- 3. Supraspinous lig -->
+        <line x1="264" y1="75" x2="244" y2="88" stroke="#206858" stroke-width=".7"/>
+        <circle cx="264" cy="75" r="2" fill="#206858" opacity=".6"/>
+        <text x="267" y="71" fill="#30a878" font-size="7.5" font-family="monospace">3. Supraspinous lig.</text>
+
+        <!-- 4. Interspinous lig -->
+        <line x1="266" y1="93" x2="240" y2="107" stroke="#206840" stroke-width=".7"/>
+        <circle cx="266" cy="93" r="2" fill="#206840" opacity=".6"/>
+        <text x="269" y="89" fill="#30a860" font-size="7.5" font-family="monospace">4. Interspinous lig.</text>
+
+        <!-- 5. Lig. flavum ⚡ (pop 1) -->
+        <line x1="268" y1="112" x2="215" y2="131" stroke="#90b030" stroke-width=".8"/>
+        <circle cx="268" cy="112" r="2.5" fill="#90b030" opacity=".8"/>
+        <text x="271" y="108" fill="#b0d040" font-size="7.5" font-family="monospace" font-weight="bold">5. Lig. flavum ⚡</text>
+        <!-- pop 1 label -->
+        <text x="75" y="175" fill="#90b030" font-size="7" font-family="monospace" text-anchor="middle">pop 1</text>
+        <line x1="82" y1="161" x2="82" y2="168" stroke="#90b030" stroke-width=".7"/>
+
+        <!-- 6. Epidural space -->
+        <line x1="268" y1="132" x2="203" y2="148" stroke="#3a7090" stroke-width=".7"/>
+        <circle cx="268" cy="132" r="2" fill="#3a7090" opacity=".6"/>
+        <text x="271" y="128" fill="#5a90b0" font-size="7.5" font-family="monospace">6. Epidural space</text>
+
+        <!-- 7. Dura mater ⚡ (pop 2) -->
+        <line x1="268" y1="150" x2="193" y2="160" stroke="#a03820" stroke-width=".8"/>
+        <circle cx="268" cy="150" r="2.5" fill="#a03820" opacity=".8"/>
+        <text x="271" y="146" fill="#d05030" font-size="7.5" font-family="monospace" font-weight="bold">7. Dura mater ⚡</text>
+        <!-- pop 2 label -->
+        <text x="105" y="175" fill="#a03820" font-size="7" font-family="monospace" text-anchor="middle">pop 2</text>
+        <line x1="105" y1="161" x2="105" y2="168" stroke="#a03820" stroke-width=".7"/>
+
+        <!-- 8. Arachnoid -->
+        <line x1="268" y1="169" x2="185" y2="170" stroke="#3a6aaa" stroke-width=".7"/>
+        <circle cx="268" cy="169" r="2" fill="#3a6aaa" opacity=".6"/>
+        <text x="271" y="165" fill="#5a8acc" font-size="7.5" font-family="monospace">8. Arachnoid</text>
+
+        <!-- 9. CSF ✓ (target) -->
+        <line x1="268" y1="188" x2="178" y2="178" stroke="#3b82f6" stroke-width=".9"/>
+        <circle cx="268" cy="188" r="2.5" fill="#3b82f6" opacity=".9"/>
+        <text x="271" y="184" fill="#3b82f6" font-size="7.5" font-family="monospace" font-weight="bold">9. CSF space ✓</text>
+        <!-- target glow -->
+        <ellipse cx="148" cy="155" rx="34" ry="25" fill="none" stroke="#3b82f6" stroke-width=".6" opacity=".4" filter="url(#layerGlow)"/>
+
+        <!-- Spinal cord label -->
+        <line x1="268" y1="207" x2="167" y2="165" stroke="#e07050" stroke-width=".7"/>
+        <circle cx="268" cy="207" r="2" fill="#e07050" opacity=".6"/>
+        <text x="271" y="203" fill="#e07050" font-size="7.5" font-family="monospace">Spinal cord</text>
+        <text x="271" y="212" fill="#7a90a8" font-size="6.5" font-family="monospace">(at L3–L4: absent)</text>
+
+        <!-- ── BOTTOM LEGEND ── -->
+        <rect x="8" y="290" width="304" height="52" rx="5" fill="rgba(0,0,0,.4)" stroke="#253040" stroke-width=".8"/>
+        <text x="16" y="304" fill="#7a90a8" font-size="7.5" font-family="monospace" font-weight="bold">KEY  ·  ⚡ = tactile give/pop felt on insertion</text>
+        <!-- colour swatches -->
+        <rect x="16" y="309" width="10" height="6" rx="1" fill="#90b030" opacity=".9"/>
+        <text x="29" y="315" fill="#b0d040" font-size="7" font-family="monospace">Lig. flavum (1st pop)</text>
+        <rect x="130" y="309" width="10" height="6" rx="1" fill="#a03820" opacity=".9"/>
+        <text x="143" y="315" fill="#d05030" font-size="7" font-family="monospace">Dura mater (2nd pop)</text>
+        <rect x="16" y="320" width="10" height="6" rx="1" fill="rgba(59,130,246,.5)" stroke="#3b82f6" stroke-width=".8"/>
+        <text x="29" y="326" fill="#3b82f6" font-size="7" font-family="monospace">CSF (target — free flow)</text>
+        <rect x="130" y="320" width="10" height="6" rx="1" fill="#d05030" opacity=".7"/>
+        <text x="143" y="326" fill="#e07050" font-size="7" font-family="monospace">Spinal cord (absent at L3–L4)</text>
+        <text x="16" y="337" fill="#7a90a8" font-size="7" font-family="monospace">Note: at L3–L4 level only cauda equina is present — individual nerve roots float freely in CSF</text>
+      </svg>
+      <p style="font-size:.72rem;color:var(--muted);margin-top:.5rem;text-align:center">Target: subarachnoid space (blue). Two tactile pops — ligamentum flavum &amp; dura mater.</p>
+    </div>
+
+  </div><!-- end anatomy-wrap -->
+
+  <!-- POSITIONING -->
+  <div class="approach-grid" id="approachGrid">
+    <div class="approach-card" onclick="selectApproach(this,'lateral')">
+      <div class="check">✓</div>
+      <h3>🛌 Lateral Decubitus</h3>
+      <p>Fetal position — knees to chest, chin tucked. Spine maximally flexed. Assistant maintains position.</p>
+      <div class="pros">
+        <span>Opening pressure valid</span><span>Better for IIH</span><span>Paeds-friendly</span><span>Less vagal</span>
+      </div>
+    </div>
+    <div class="approach-card" onclick="selectApproach(this,'sitting')">
+      <div class="check">✓</div>
+      <h3>🪑 Sitting (Upright)</h3>
+      <p>Hunched forward over pillow. Excellent landmark ID. Best for obese, arthritis, scoliosis patients.</p>
+      <div class="pros">
+        <span>Easier in obesity</span><span>Better landmarks</span><span>Wider gap</span><span>Scoliosis</span>
+      </div>
+    </div>
+  </div>
+  <div id="approachDetail" style="display:none" class="highlight-box">
+    <strong id="approachTitle"></strong>
+    <div id="approachText" style="margin-top:.5rem"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- DEPTH TABLE -->
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--accent);letter-spacing:.12em;margin-bottom:.7rem">// ESTIMATED NEEDLE DEPTH BY PATIENT PROFILE</div>
+  <table class="depth-table">
+    <thead><tr><th>Patient Profile</th><th>Estimated Depth</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Average adult</td><td class="accent-td">4–6 cm</td><td>Standard 3.5" (90 mm) needle sufficient</td></tr>
+      <tr><td>Slim / paediatric adult</td><td class="accent-td">3–4 cm</td><td>Easy — don't overshoot</td></tr>
+      <tr><td>Overweight (BMI 25–30)</td><td class="accent-td">5–7 cm</td><td>May need longer needle; sitting position helps</td></tr>
+      <tr><td>Obese (BMI &gt;30)</td><td class="accent-td">7–10+ cm</td><td>Use 5" needle; ultrasound pre-marking recommended</td></tr>
+      <tr><td>Child (&lt;12 yrs)</td><td class="accent-td">2–3 cm</td><td>Use 22–25G short needle; LA optional if &lt;2 yrs</td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight-box" style="margin-top:1rem">
+    <strong>Tuffier's Line:</strong> Connect both posterior superior iliac spines (PSIS) → this line crosses L4 spinous process or L4–L5 interspace. Target ONE interspace above (L3–L4). Re-confirm with palpation through the drape after prep.
+  </div>
+
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=lumbar+puncture+positioning+anatomy+landmarks+technique" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    Watch: LP Anatomy &amp; Positioning
+  </a>
+</div>
+
+<!-- ═══════════════════════════════ NEEDLES ═══════════════════════════════ -->
+<div id="needles" class="section">
+  <div class="section-title">Needle <span>Selection</span></div>
+  <div class="section-sub">// Type, gauge, and when to use what</div>
+
+  <div class="highlight-box">
+    <strong>Core Principle:</strong> Pencil-point (atraumatic) needles significantly reduce post-LP headache (PDPH) by splitting rather than cutting dural fibres. Use them when available. The trade-off is slightly slower CSF flow and requires an introducer needle.
+  </div>
+
+  <!-- SVG needle tip comparison -->
+  <div class="anatomy-box" style="margin-bottom:1.2rem">
+    <h4>// Needle Tip Comparison — Quincke vs Atraumatic</h4>
+    <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="max-height:210px">
+      <defs>
+        <!-- Quincke shaft gradient -->
+        <linearGradient id="qShaftGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#6090c8"/>
+          <stop offset="40%" stop-color="#3b6ab0"/>
+          <stop offset="100%" stop-color="#1a3870"/>
+        </linearGradient>
+        <!-- Atraumatic shaft gradient -->
+        <linearGradient id="atShaftGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#40c0a0"/>
+          <stop offset="40%" stop-color="#00a080"/>
+          <stop offset="100%" stop-color="#005040"/>
+        </linearGradient>
+        <!-- Dura gradient -->
+        <linearGradient id="duraAxGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#7a2810" stop-opacity=".9"/>
+          <stop offset="100%" stop-color="#5a1808" stop-opacity=".8"/>
+        </linearGradient>
+        <!-- Glow -->
+        <filter id="tipGlow">
+          <feGaussianBlur stdDeviation="1.5" result="blur"/>
+          <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+        </filter>
+        <!-- Arrow markers -->
+        <marker id="arrowRed" markerWidth="7" markerHeight="7" refX="3" refY="3.5" orient="auto">
+          <polygon points="0 0,7 3.5,0 7" fill="#ff4757"/>
+        </marker>
+        <marker id="arrowGreen" markerWidth="7" markerHeight="7" refX="3" refY="3.5" orient="auto">
+          <polygon points="0 0,7 3.5,0 7" fill="#22c55e"/>
+        </marker>
+        <marker id="arrowGreenLeft" markerWidth="7" markerHeight="7" refX="4" refY="3.5" orient="auto-start-reverse">
+          <polygon points="0 3.5,7 0,7 7" fill="#22c55e"/>
+        </marker>
+      </defs>
+
+      <!-- Background -->
+      <rect x="0" y="0" width="560" height="200" fill="#0c0f14" rx="6"/>
+
+      <!-- ══ DIVIDER LINE ══ -->
+      <line x1="280" y1="10" x2="280" y2="190" stroke="#1e2e40" stroke-width="1" stroke-dasharray="5,4"/>
+
+      <!-- ══════ LEFT: QUINCKE ══════ -->
+      <text x="16" y="22" fill="#7a90a8" font-size="9.5" font-family="monospace" font-weight="bold">Quincke — Cutting Bevel</text>
+
+      <!-- Needle shaft -->
+      <rect x="16" y="42" width="240" height="14" rx="3" fill="url(#qShaftGrad)" stroke="#4070a0" stroke-width=".8"/>
+      <!-- Inner channel / stylet -->
+      <rect x="18" y="45" width="234" height="5" rx="1.5" fill="rgba(100,160,220,.2)"/>
+      <!-- Shaft highlight -->
+      <rect x="18" y="42.5" width="236" height="3" rx="1.5" fill="rgba(200,230,255,.2)"/>
+
+      <!-- Bevel tip (cutting, angled) -->
+      <polygon points="256,42 280,48.5 256,56" fill="#5a8ad0" stroke="#7aaaf0" stroke-width="1" filter="url(#tipGlow)"/>
+      <!-- Bevel edge highlight (sharp) -->
+      <line x1="256" y1="42" x2="280" y2="48.5" stroke="#a0c8f8" stroke-width="1.2"/>
+
+      <!-- Hub -->
+      <rect x="8" y="38" width="10" height="22" rx="2.5" fill="#1a2a50" stroke="#3b6ab0" stroke-width="1"/>
+      <!-- Wing tabs -->
+      <rect x="6" y="44" width="4" height="10" rx="1" fill="#1a2a50" stroke="#3b6ab0" stroke-width=".8"/>
+
+      <!-- Dura representation — vertical barrier -->
+      <rect x="278" y="30" width="8" height="38" rx="2" fill="url(#duraAxGrad)" opacity=".9"/>
+      <!-- Dura fibres (vertical lines) -->
+      <line x1="281" y1="32" x2="281" y2="66" stroke="#a05030" stroke-width=".8" opacity=".6"/>
+      <line x1="283" y1="32" x2="283" y2="66" stroke="#a05030" stroke-width=".8" opacity=".6"/>
+      <line x1="285" y1="32" x2="285" y2="66" stroke="#a05030" stroke-width=".8" opacity=".6"/>
+      <text x="282" y="26" fill="#a05030" font-size="7" font-family="monospace" text-anchor="middle">Dura</text>
+
+      <!-- Cut arrows — fibres being transected -->
+      <line x1="286" y1="36" x2="240" y2="33" stroke="#ff4757" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrowRed)"/>
+      <line x1="286" y1="62" x2="240" y2="65" stroke="#ff4757" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrowRed)"/>
+      <!-- Wound flap arrows (fibres splaying outward from cut) -->
+      <path d="M286,38 Q300,34 308,30" stroke="#ff4757" stroke-width="1.2" fill="none" opacity=".7"/>
+      <path d="M286,60 Q300,64 308,68" stroke="#ff4757" stroke-width="1.2" fill="none" opacity=".7"/>
+
+      <!-- Label: fibres CUT -->
+      <text x="148" y="80" fill="#ff4757" font-size="8" font-family="monospace" font-weight="bold" text-anchor="middle">✗ Dural fibres CUT → persistent hole → CSF leak → PDPH</text>
+
+      <!-- Bevel orientation tip -->
+      <rect x="16" y="88" width="255" height="22" rx="3" fill="rgba(59,130,246,.07)" stroke="rgba(59,130,246,.2)" stroke-width=".8"/>
+      <text x="24" y="100" fill="#5a8acc" font-size="7.5" font-family="monospace">💡 Bevel orientation: insert PARALLEL to dural fibres</text>
+      <text x="24" y="109" fill="#5a8acc" font-size="7" font-family="monospace">(bevel facing ceiling in lateral decubitus → splits rather than cuts)</text>
+
+      <!-- PDPH rate badge -->
+      <rect x="16" y="115" width="255" height="18" rx="3" fill="rgba(255,71,87,.08)" stroke="rgba(255,71,87,.2)" stroke-width=".8"/>
+      <text x="24" y="127" fill="#ff8888" font-size="8" font-family="monospace">PDPH rate: ~15–30%  ·  Standard availability  ·  Faster CSF flow</text>
+
+      <!-- ══════ RIGHT: ATRAUMATIC / SPROTTE ══════ -->
+      <text x="292" y="22" fill="#00d4aa" font-size="9.5" font-family="monospace" font-weight="bold">Sprotte / Whitacre — Pencil-Point</text>
+
+      <!-- Needle shaft -->
+      <rect x="292" y="42" width="225" height="14" rx="3" fill="url(#atShaftGrad)" stroke="#00a080" stroke-width=".8"/>
+      <!-- Inner lumen -->
+      <rect x="294" y="45" width="219" height="5" rx="1.5" fill="rgba(0,200,160,.15)"/>
+      <!-- Shaft highlight -->
+      <rect x="294" y="42.5" width="221" height="3" rx="1.5" fill="rgba(160,255,230,.2)"/>
+
+      <!-- Pencil-point tip (conical, round) -->
+      <polygon points="517,42 543,48.5 517,56" fill="#00b890" stroke="#00d4aa" stroke-width="1" filter="url(#tipGlow)"/>
+      <!-- Conical tip rounded cap -->
+      <ellipse cx="541" cy="48.5" rx="3" ry="5" fill="#00c8a0" stroke="#00d4aa" stroke-width=".8"/>
+      <!-- Side port (opening in shaft) -->
+      <ellipse cx="510" cy="49" rx="6" ry="5" fill="rgba(0,212,170,.35)" stroke="#00d4aa" stroke-width="1.2"/>
+      <!-- Side port hole detail -->
+      <ellipse cx="510" cy="49" rx="4" ry="3.5" fill="rgba(0,212,170,.55)"/>
+      <text x="510" y="66" fill="#00d4aa" font-size="6.5" font-family="monospace" text-anchor="middle">side port</text>
+      <line x1="510" y1="63" x2="510" y2="58" stroke="#00d4aa" stroke-width=".7"/>
+
+      <!-- Hub -->
+      <rect x="284" y="38" width="10" height="22" rx="2.5" fill="#082820" stroke="#00a080" stroke-width="1"/>
+      <rect x="282" y="44" width="4" height="10" rx="1" fill="#082820" stroke="#00a080" stroke-width=".8"/>
+
+      <!-- Dura representation -->
+      <rect x="541" y="30" width="8" height="38" rx="2" fill="url(#duraAxGrad)" opacity=".9"/>
+      <!-- Dura fibres -->
+      <line x1="544" y1="32" x2="544" y2="66" stroke="#a05030" stroke-width=".8" opacity=".6"/>
+      <line x1="546" y1="32" x2="546" y2="66" stroke="#a05030" stroke-width=".8" opacity=".6"/>
+      <line x1="548" y1="32" x2="548" y2="66" stroke="#a05030" stroke-width=".8" opacity=".6"/>
+      <text x="545" y="26" fill="#a05030" font-size="7" font-family="monospace" text-anchor="middle">Dura</text>
+
+      <!-- Separation arrows — fibres pushed apart, then recoil -->
+      <line x1="549" y1="38" x2="549" y2="28" stroke="#22c55e" stroke-width="1.2" marker-end="url(#arrowGreen)"/>
+      <line x1="549" y1="60" x2="549" y2="70" stroke="#22c55e" stroke-width="1.2" marker-end="url(#arrowGreen)"/>
+      <!-- Recoil arrows (fibres closing back) -->
+      <path d="M549,32 Q553,35 555,40" stroke="#22c55e" stroke-width="1" fill="none" stroke-dasharray="2,1.5"/>
+      <path d="M549,66 Q553,63 555,58" stroke="#22c55e" stroke-width="1" fill="none" stroke-dasharray="2,1.5"/>
+      <!-- Recoil label arrows pointing back toward midline -->
+      <line x1="553" y1="44" x2="546" y2="46" stroke="#22c55e" stroke-width=".8" stroke-dasharray="2,1"/>
+      <line x1="553" y1="52" x2="546" y2="52" stroke="#22c55e" stroke-width=".8" stroke-dasharray="2,1"/>
+
+      <!-- Label: fibres SEPARATED -->
+      <text x="415" y="80" fill="#22c55e" font-size="8" font-family="monospace" font-weight="bold" text-anchor="middle">✓ Dural fibres SEPARATED → recoil → seals → less PDPH</text>
+
+      <!-- Tip detail -->
+      <rect x="292" y="88" width="255" height="22" rx="3" fill="rgba(0,212,170,.07)" stroke="rgba(0,212,170,.2)" stroke-width=".8"/>
+      <text x="300" y="100" fill="#00d4aa" font-size="7.5" font-family="monospace">💡 Pencil-point tip splays fibres radially</text>
+      <text x="300" y="109" fill="#7a90a8" font-size="7" font-family="monospace">CSF exits through side port, not tip — requires introducer needle</text>
+
+      <!-- PDPH rate badge -->
+      <rect x="292" y="115" width="255" height="18" rx="3" fill="rgba(0,212,170,.07)" stroke="rgba(0,212,170,.2)" stroke-width=".8"/>
+      <text x="300" y="127" fill="#00d4aa" font-size="8" font-family="monospace">PDPH rate: ~2–5%  ·  First choice when available  ·  Needs introducer</text>
+
+      <!-- Bottom comparison footer -->
+      <rect x="8" y="140" width="544" height="52" rx="5" fill="rgba(0,0,0,.4)" stroke="#1e2e40" stroke-width=".8"/>
+      <text x="16" y="155" fill="#7a90a8" font-size="8" font-family="monospace" font-weight="bold">Gauge Selection Guide</text>
+      <!-- Quincke gauges -->
+      <text x="16" y="168" fill="#3b82f6" font-size="7.5" font-family="monospace">Quincke:</text>
+      <text x="70" y="168" fill="#7a90a8" font-size="7.5" font-family="monospace">20G – fast, high PDPH  ·  22G – ER standard  ·  25G – slower, lower PDPH</text>
+      <!-- Atraumatic gauges -->
+      <text x="16" y="181" fill="#00d4aa" font-size="7.5" font-family="monospace">Atraumatic:</text>
+      <text x="84" y="181" fill="#7a90a8" font-size="7.5" font-family="monospace">Sprotte 22G – preferred ER choice  ·  Whitacre 25G – best for elective/outpatient LP</text>
+    </svg>
+  </div>
+
+  <div class="needle-grid">
+    <div class="needle-card">
+      <div class="nc-label">Standard</div>
+      <h4>Quincke 20G</h4>
+      <p>Classic cutting bevel. Readily available. Faster CSF flow. Higher PDPH rate (~15–30%).</p>
+      <div class="tag-row">
+        <span class="ntag ntag-green">Available everywhere</span>
+        <span class="ntag ntag-green">Fast flow</span>
+        <span class="ntag ntag-red">Higher PDPH</span>
+      </div>
+    </div>
+    <div class="needle-card">
+      <div class="nc-label">Preferred</div>
+      <h4>Quincke 22G</h4>
+      <p>Good balance. Standard ER choice where atraumatic not available. Insert bevel parallel to dural fibres.</p>
+      <div class="tag-row">
+        <span class="ntag ntag-green">Standard ER</span>
+        <span class="ntag ntag-blue">Bevel orientation key</span>
+      </div>
+    </div>
+    <div class="needle-card">
+      <div class="nc-label">First Choice</div>
+      <h4>Sprotte 22G</h4>
+      <p>Atraumatic pencil-point. Conical tip, side port. PDPH ~2–5%. Requires introducer. Slightly slower flow.</p>
+      <div class="tag-row">
+        <span class="ntag ntag-green">Lowest PDPH</span>
+        <span class="ntag ntag-blue">Needs introducer</span>
+        <span class="ntag ntag-red">Slower flow</span>
+      </div>
+    </div>
+    <div class="needle-card">
+      <div class="nc-label">Atraumatic</div>
+      <h4>Whitacre 25G</h4>
+      <p>Pencil-point, very fine. Excellent for outpatient/elective LP. Very slow flow — patience required.</p>
+      <div class="tag-row">
+        <span class="ntag ntag-green">Minimal PDPH</span>
+        <span class="ntag ntag-red">Very slow flow</span>
+        <span class="ntag ntag-blue">Elective preferred</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <strong>Bevel Orientation (Quincke only):</strong> In lateral decubitus, insert with bevel FACING UP (toward ceiling). This orients the cutting edge parallel to the vertically-running dural collagen fibres, splitting rather than transecting them. In sitting position, bevel faces left or right (laterally). This is not relevant for pencil-point needles.
+  </div>
+
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=spinal+needle+types+quincke+sprotte+whitacre+comparison+PDPH" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    Watch: Needle Types &amp; PDPH Prevention
+  </a>
+</div>
+
+<!-- ═══════════════════════════════ PREP ═══════════════════════════════ -->
+<div id="prep" class="section">
+  <div class="section-title">Preparation <span>&amp; Setup</span></div>
+  <div class="section-sub">// Interactive checklist — tap to check off</div>
+
+  <div class="progress-bar"><div class="progress-fill" id="prepProgress" style="width:0%"></div></div>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:1rem">
+    Progress: <span id="prepCount">0</span>/<span id="prepTotal">0</span> checked
+  </div>
+
+  <div class="checklist" id="prepChecklist">
+    <div class="check-category">// Patient &amp; Consent</div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Explain procedure — risks: PDPH 10–30%, infection &lt;1:1000, bleeding, transient paraesthesia, rare cord injury</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Check INR, platelets, current anticoagulants/antiplatelets</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Review CT if indicated — no contraindications confirmed</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>IV access established</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Position patient and mark landmark BEFORE draping</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Serum glucose drawn simultaneously for CSF:serum ratio</span></div>
+
+    <div class="check-category">// Equipment Tray</div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Spinal needle: 22G Quincke OR Sprotte/Whitacre atraumatic (+ introducer if pencil-point)</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Manometer + 3-way stopcock</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>4 numbered collection tubes + extra if needed</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Sterile drapes, gloves, gown, mask</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Chlorhexidine antiseptic + applicators (allow to DRY 30 s before proceeding)</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>1% lidocaine 5 mL, 25G infiltration needle, 22G deeper needle, 5 mL syringe</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Adhesive dressing</span></div>
+
+    <div class="check-category">// Lab Tubes — Pre-Labelled</div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Tube 1: Cell count + differential (may be traumatic — compare to Tube 4)</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Tube 2: Glucose + protein</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Tube 3: Gram stain + culture &amp; sensitivity</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Tube 4: Special (xanthochromia, PCR, cryptococcal Ag, cytology, oligoclonal bands) + repeat cell count</span></div>
+
+    <div class="check-category">// Room &amp; Team</div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Nurse briefed on positioning maintenance role</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Adequate lighting aimed at insertion site</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Resuscitation trolley within reach</span></div>
+  </div>
+
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=lumbar+puncture+preparation+setup+equipment+tray+sterile" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    Watch: LP Tray Setup
+  </a>
+</div>
+
+<!-- ═══════════════════════════════ TECHNIQUE ═══════════════════════════════ -->
+<div id="technique" class="section">
+  <div class="section-title">Step-by-Step <span>Technique</span></div>
+  <div class="section-sub">// Expand each step</div>
+
+  <a class="yt-link" style="margin-bottom:1.2rem;display:inline-flex" href="https://www.youtube.com/results?search_query=lumbar+puncture+step+by+step+full+procedure+technique" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    Full Procedure Video
+  </a>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="step-num">01</span> Position &amp; Landmark Identification</h3>
+      <span class="accordion-chevron">▼</span>
+    </div>
+    <div class="accordion-body">
+      Lateral decubitus or sitting. Find L3–L4 via Tuffier's line. Mark the interspace with fingernail indent BEFORE sterile draping.<br><br>
+      <strong>Lateral decubitus tips:</strong> Spine must be parallel to bed — no sagittal tilt. Ear–shoulder–hip–knee in one horizontal plane. Pillow between knees helps.<br><br>
+      <div class="tip">💡 Ask the patient: "Roll toward me and curl up tight." Step behind them, palpate both PSIS simultaneously with both thumbs, draw the mental line, then walk your fingers one space UP to L3–L4.</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="step-num">02</span> Sterile Prep &amp; Local Anaesthetic</h3>
+      <span class="accordion-chevron">▼</span>
+    </div>
+    <div class="accordion-body">
+      Chlorhexidine in concentric circles — let dry 30 seconds. Apply drapes.<br><br>
+      <strong>Local anaesthetic sequence:</strong>
+      <ol>
+        <li>25G needle — skin wheal with 1–2 mL 1% lidocaine</li>
+        <li>22G needle — infiltrate deeper along intended needle tract, angled toward umbilicus (~15° cephalad), 2–3 mL</li>
+        <li>Wait 60–90 seconds for full effect</li>
+      </ol>
+      <div class="tip">💡 The LA itself is the most painful part for most patients. Inject slowly. If they don't feel the spinal needle going in, you've done it right.</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="step-num">03</span> Needle Insertion</h3>
+      <span class="accordion-chevron">▼</span>
+    </div>
+    <div class="accordion-body">
+      <strong>Midline approach:</strong> Bevel UP (Quincke), needle in midline, ~15° cephalad toward umbilicus.<br><br>
+      <strong>Layers traversed (feel each):</strong>
+      <ol>
+        <li>Skin → subcutaneous fat: little resistance</li>
+        <li>Supraspinous ligament: slight resistance begins</li>
+        <li>Interspinous ligament: firmer resistance</li>
+        <li>Ligamentum flavum: dense, rubbery — <strong>first "give"</strong></li>
+        <li>Epidural space: brief space (2–4 mm)</li>
+        <li>Dura mater: another slight resistance — <strong>second "give/pop"</strong></li>
+        <li>Subarachnoid space: free CSF flow on stylet removal ✓</li>
+      </ol>
+      <div class="tip">💡 Remove stylet every 1 cm after passing the ligamentum flavum. Don't overshoot into the anterior venous plexus.</div>
+      <div class="warn-box">⚠️ Sudden radicular shooting pain → nerve root contact. STOP. Withdraw 5–10 mm, redirect away from affected leg.</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="step-num">04</span> Opening Pressure</h3>
+      <span class="accordion-chevron">▼</span>
+    </div>
+    <div class="accordion-body">
+      <strong>Lateral position only</strong> for valid measurement. Attach 3-way stopcock + manometer.<br><br>
+      Ask patient to slowly <strong>straighten legs slightly</strong> (reduces intra-abdominal pressure). Read when CSF column stabilises (5–10 s).<br><br>
+      <table class="depth-table" style="margin-top:.5rem">
+        <thead><tr><th>Pressure</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td>6–20 cmH₂O</td><td style="color:var(--green)">Normal</td></tr>
+          <tr><td>&gt;25 cmH₂O</td><td style="color:var(--warn)">Raised ICP — IIH, meningitis, mass</td></tr>
+          <tr><td>&gt;40 cmH₂O</td><td style="color:var(--warn)">Markedly raised — drain cautiously, max 20–30 mL</td></tr>
+          <tr><td>&lt;6 cmH₂O</td><td style="color:var(--accent3)">Low — CSF leak, dehydration, spinal block</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="step-num">05</span> CSF Collection</h3>
+      <span class="accordion-chevron">▼</span>
+    </div>
+    <div class="accordion-body">
+      Let CSF drip freely. Collect 1–2 mL per tube (min 6–8 mL total). <strong>Do NOT aspirate with a syringe.</strong><br><br>
+      <ul>
+        <li><strong>Tube 1:</strong> Cell count (may be traumatically contaminated)</li>
+        <li><strong>Tube 2:</strong> Protein + glucose</li>
+        <li><strong>Tube 3:</strong> Gram stain + C&amp;S</li>
+        <li><strong>Tube 4:</strong> Special tests + repeat cell count (compare to Tube 1 for traumatic tap)</li>
+      </ul>
+      <div class="tip">💡 SAH vs traumatic tap: if Tube 1 and Tube 4 have equal RBC counts = SAH. If RBCs decrease = traumatic tap. Spin Tube 4 — xanthochromic supernatant = SAH.</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="step-num">06</span> Withdrawal &amp; Aftercare</h3>
+      <span class="accordion-chevron">▼</span>
+    </div>
+    <div class="accordion-body">
+      Replace stylet before withdrawal (reduces PDPH). Withdraw smoothly, apply pressure + dressing.<br><br>
+      <strong>Post-procedure:</strong> No strict bed rest needed — evidence does not support lying flat to prevent headache. Encourage oral fluids. Monitor vitals 1 hour.<br><br>
+      <strong>Warn about PDPH:</strong> Positional headache (worse upright, better supine), onset 24–48 h. Treat: bed rest, hydration, caffeine (300–500 mg), analgesics. Severe: <strong>epidural blood patch</strong> (gold standard, 85–90% effective).
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=post+lumbar+puncture+headache+management+epidural+blood+patch" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        Watch: PDPH &amp; Blood Patch
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ TROUBLESHOOTING ═══════════════════════════════ -->
+<div id="troubleshoot" class="section">
+  <div class="section-title"><span>Trouble</span>shooting</div>
+  <div class="section-sub">// Navigating difficult LPs</div>
+
+  <a class="yt-link" style="margin-bottom:1.2rem;display:inline-flex" href="https://www.youtube.com/results?search_query=difficult+lumbar+puncture+troubleshooting+tips" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    Watch: Difficult LP Tips
+  </a>
+
+  <div class="problem-card">
+    <div class="problem-header" onclick="toggleProblem(this)">
+      <span class="problem-icon">🦴</span><span class="problem-title">Needle hits bone / can't advance</span>
+      <span class="problem-badge badge-common">MOST COMMON</span><span class="accordion-chevron">▼</span>
+    </div>
+    <div class="problem-body">
+      <strong>Causes:</strong> Off-midline, wrong angle, inadequate flexion, calcified midline ligaments (elderly).<br><br>
+      <div class="solution-step"><div class="num">1</div><span>Withdraw to just subcutaneous — don't fully remove</span></div>
+      <div class="solution-step"><div class="num">2</div><span>Re-palpate landmarks. Correct to true midline</span></div>
+      <div class="solution-step"><div class="num">3</div><span>Ensure maximum flexion — push knees further, chin further</span></div>
+      <div class="solution-step"><div class="num">4</div><span>Try one level higher (L2–L3) or lower (L4–L5)</span></div>
+      <div class="solution-step"><div class="num">5</div><span>Switch to <strong>sitting position</strong> — opens gaps significantly</span></div>
+      <div class="solution-step"><div class="num">6</div><span><strong>Paramedian approach:</strong> 1 cm lateral to midline, angle medially 10–15° and cephalad — bypasses calcified midline ligaments</span></div>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=paramedian+lumbar+puncture+approach+technique" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        Watch: Paramedian Approach
+      </a>
+    </div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-header" onclick="toggleProblem(this)">
+      <span class="problem-icon">🩸</span><span class="problem-title">Bloody CSF — traumatic tap vs SAH</span>
+      <span class="problem-badge badge-common">COMMON</span><span class="accordion-chevron">▼</span>
+    </div>
+    <div class="problem-body">
+      <div class="solution-step"><div class="num">1</div><span>Compare Tube 1 vs Tube 4 RBC counts — decreasing = traumatic; equal = SAH</span></div>
+      <div class="solution-step"><div class="num">2</div><span>Spin sample — clear supernatant = traumatic; yellow/xanthochromic = SAH</span></div>
+      <div class="solution-step"><div class="num">3</div><span>Xanthochromia needs ≥2–4 hours post-bleed — LP &lt;6h may miss it</span></div>
+      <div class="solution-step"><div class="num">4</div><span>If heavily bloody: apply pressure, try different level (L4–L5)</span></div>
+      <div style="margin-top:.6rem;font-size:.78rem;color:var(--accent3)">⚠️ Traumatic tap RBC:WBC ~700:1. Excess WBCs = genuine pleocytosis.</div>
+    </div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-header" onclick="toggleProblem(this)">
+      <span class="problem-icon">💧</span><span class="problem-title">No CSF flow — dry tap</span>
+      <span class="problem-badge badge-common">COMMON</span><span class="accordion-chevron">▼</span>
+    </div>
+    <div class="problem-body">
+      <div class="solution-step"><div class="num">1</div><span>Rotate needle 90° — bevel may be against dural wall</span></div>
+      <div class="solution-step"><div class="num">2</div><span>Ask patient to cough briefly — may dislodge CSF</span></div>
+      <div class="solution-step"><div class="num">3</div><span>Advance 1–2 mm further — may not be fully in subarachnoid space</span></div>
+      <div class="solution-step"><div class="num">4</div><span>Replace stylet, withdraw slightly, redirect</span></div>
+      <div class="solution-step"><div class="num">5</div><span>Use ultrasound to confirm depth and level</span></div>
+      <a class="yt-link" href="https://www.youtube.com/results?search_query=ultrasound+guided+lumbar+puncture+technique+guidance" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        Watch: US-Guided LP
+      </a>
+    </div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-header" onclick="toggleProblem(this)">
+      <span class="problem-icon">⚡</span><span class="problem-title">Radicular shooting pain during insertion</span>
+      <span class="problem-badge badge-critical">STOP IMMEDIATELY</span><span class="accordion-chevron">▼</span>
+    </div>
+    <div class="problem-body">
+      Needle tip contacting cauda equina nerve root. Sharp shooting pain down one leg.<br><br>
+      <div class="solution-step"><div class="num">1</div><span><strong>STOP advancing.</strong> Do not push further.</span></div>
+      <div class="solution-step"><div class="num">2</div><span>Identify which leg — withdraw 5–10 mm, redirect away from that side</span></div>
+      <div class="solution-step"><div class="num">3</div><span>If pain persists: fully withdraw, reassess positioning</span></div>
+      <div class="solution-step"><div class="num">4</div><span>Document the episode; assess lower limb neurology post-procedure</span></div>
+    </div>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-header" onclick="toggleProblem(this)">
+      <span class="problem-icon">⚖️</span><span class="problem-title">Obese patient / poor landmarks</span>
+      <span class="problem-badge badge-common">CHALLENGING</span><span class="accordion-chevron">▼</span>
+    </div>
+    <div class="problem-body">
+      <div class="solution-step"><div class="num">1</div><span>Switch to sitting position — landmarks become palpable upright</span></div>
+      <div class="solution-step"><div class="num">2</div><span>Ultrasound pre-marking: identify midline + measure depth to subarachnoid space</span></div>
+      <div class="solution-step"><div class="num">3</div><span>Use longer needle (5") — standard 3.5" insufficient in BMI &gt;35</span></div>
+      <div class="solution-step"><div class="num">4</div><span>Assistant holds/retracts pannus if obstructing access</span></div>
+      <div class="solution-step"><div class="num">5</div><span>Repeated failures → fluoroscopy/CT-guided LP via radiology</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ COMPLICATIONS ═══════════════════════════════ -->
+<div id="complications" class="section">
+  <div class="section-title">Post-LP <span>Complications</span></div>
+  <div class="section-sub">// Recognition, timing, and management</div>
+
+  <div class="warn-highlight">
+    <strong>Key principle:</strong> Most complications are mild and self-limiting. PDPH is the most common. Serious complications (herniation, infection, haematoma) are rare but require prompt recognition.
+  </div>
+
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--accent);letter-spacing:.12em;margin-bottom:.8rem">// COMPLICATION TIMELINE</div>
+  <div class="timeline">
+    <div class="tl-item caution-tl">
+      <div class="tl-time">DURING PROCEDURE</div>
+      <div class="tl-title">Vasovagal syncope</div>
+      <div class="tl-desc">Bradycardia + hypotension + pallor. Lay patient flat, legs up, IV fluids, atropine if persistent. Prevention: warn patient, calm environment, avoid prolonged painful attempts.</div>
+    </div>
+    <div class="tl-item caution-tl">
+      <div class="tl-time">DURING PROCEDURE</div>
+      <div class="tl-title">Radicular paraesthesia</div>
+      <div class="tl-desc">Transient shooting pain down one leg — nerve root contact. Withdraw and redirect. Document. Persistent neurology post-LP → neurology review.</div>
+    </div>
+    <div class="tl-item warn-tl">
+      <div class="tl-time">24–48 HOURS</div>
+      <div class="tl-title">Post-LP Headache (PDPH)</div>
+      <div class="tl-desc"><strong>Most common complication (10–30% with Quincke, 2–5% with atraumatic needles).</strong> Classic: bilateral frontal/occipital, positional — worse upright, relieved supine. Manage: bed rest, hydration, caffeine 300–500 mg PO. Persistent (&gt;24h despite conservative) → epidural blood patch (10–20 mL autologous blood, 85–90% success).</div>
+    </div>
+    <div class="tl-item info-tl">
+      <div class="tl-time">24–72 HOURS</div>
+      <div class="tl-title">Back pain / injection site pain</div>
+      <div class="tl-desc">Common, mild — local tissue trauma. NSAIDs / paracetamol. Severe, progressive, or with radiculopathy → exclude haematoma or abscess (urgent MRI).</div>
+    </div>
+    <div class="tl-item warn-tl">
+      <div class="tl-time">DAYS–WEEKS</div>
+      <div class="tl-title">Spinal / Epidural Haematoma</div>
+      <div class="tl-desc"><strong>Rare but serious.</strong> Risk factors: coagulopathy, anticoagulants, multiple attempts. Presents: severe back pain + progressive lower limb weakness/bladder dysfunction. Emergency MRI + neurosurgical review. Must decompress within hours to prevent permanent deficit.</div>
+    </div>
+    <div class="tl-item warn-tl">
+      <div class="tl-time">DAYS–WEEKS</div>
+      <div class="tl-title">Meningitis / Abscess</div>
+      <div class="tl-desc">Iatrogenic — failure of sterile technique or skin flora tracking. Presents: fever, worsening headache, neck stiffness post-LP. Extremely rare (&lt;1:1000). Manage as new meningitis.</div>
+    </div>
+    <div class="tl-item warn-tl">
+      <div class="tl-time">HOURS (IF CT NOT DONE)</div>
+      <div class="tl-title">Cerebral Herniation</div>
+      <div class="tl-desc"><strong>The feared complication.</strong> Occurs if LP performed with unrecognised raised ICP + mass effect. Transtentorial or tonsillar herniation → death. Prevented by CT screening for contraindications. Signs: sudden deterioration, anisocoria, posturing post-LP → immediate CT + neurosurgery.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="two-col">
+    <div class="card caution">
+      <div class="card-label">🩺 PDPH Management Ladder</div>
+      <h3>Post-LP Headache</h3>
+      <ul>
+        <li><strong>Step 1:</strong> Reassurance, oral hydration, paracetamol + NSAIDs</li>
+        <li><strong>Step 2:</strong> Caffeine 300 mg PO/IV (vasoconstrictive)</li>
+        <li><strong>Step 3:</strong> IV fluids + IV caffeine sodium benzoate</li>
+        <li><strong>Step 4:</strong> <strong>Epidural blood patch</strong> — 10–20 mL autologous blood at LP level. Gold standard for refractory PDPH. 85–90% single-treatment success.</li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <div class="card-label">🚨 When to Escalate</div>
+      <h3>Red Flags Post-LP</h3>
+      <ul>
+        <li>Non-positional headache (may indicate haematoma or herniation)</li>
+        <li>Progressive leg weakness or bladder/bowel dysfunction → urgent MRI</li>
+        <li>Fever + meningism worsening → new meningitis workup</li>
+        <li>Deteriorating GCS post-procedure → immediate CT + neurosurgery</li>
+        <li>Localised back swelling + radiculopathy → exclude haematoma</li>
+      </ul>
+    </div>
+  </div>
+
+  <a class="yt-link" href="https://www.youtube.com/results?search_query=lumbar+puncture+complications+management+PDPH+blood+patch" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    Watch: LP Complications
+  </a>
+</div>
+
+<!-- ═══════════════════════════════ CSF ═══════════════════════════════ -->
+<div id="csf" class="section">
+  <div class="section-title">CSF <span>Interpretation</span></div>
+  <div class="section-sub">// What does the fluid tell you?</div>
+
+  <a class="yt-link" style="margin-bottom:1.2rem;display:inline-flex" href="https://www.youtube.com/results?search_query=CSF+analysis+interpretation+meningitis+results+medical" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    Watch: CSF Interpretation
+  </a>
+
+  <div class="highlight-box">
+    <strong>Visual first:</strong> Normal CSF = crystal clear, colourless. Cloudy/turbid = cells (infection). Xanthochromic (yellow) = old blood or markedly elevated protein. Pink/red = fresh blood.
+  </div>
+
+  <table class="csf-table">
+    <thead>
+      <tr>
+        <th>Parameter</th><th>Normal</th><th>Bacterial</th><th>Viral</th><th>TB</th><th>SAH</th><th>GBS</th><th>IIH</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="row-label">Appearance</td>
+        <td class="normal">Clear</td>
+        <td class="abnormal">Turbid/Purulent</td>
+        <td>Clear/Hazy</td>
+        <td>Hazy/Cobweb</td>
+        <td class="abnormal">Pink→Xantho</td>
+        <td>Clear</td>
+        <td>Clear</td>
+      </tr>
+      <tr>
+        <td class="row-label">Opening P.</td>
+        <td class="normal">6–20</td>
+        <td class="abnormal">↑↑ &gt;20</td>
+        <td>N or ↑</td>
+        <td class="abnormal">↑ 20–40</td>
+        <td>Variable</td>
+        <td>Normal</td>
+        <td class="abnormal">↑↑ &gt;25</td>
+      </tr>
+      <tr>
+        <td class="row-label">WBC (cells/µL)</td>
+        <td class="normal">&lt;5 mono</td>
+        <td class="abnormal">100–50k PMN</td>
+        <td>10–1000 Lymph</td>
+        <td>10–500 Lymph</td>
+        <td>&lt;5</td>
+        <td class="normal">&lt;5</td>
+        <td class="normal">&lt;5</td>
+      </tr>
+      <tr>
+        <td class="row-label">Protein (g/L)</td>
+        <td class="normal">0.15–0.45</td>
+        <td class="abnormal">↑↑ &gt;1.0</td>
+        <td>↑ 0.5–1.0</td>
+        <td class="abnormal">↑↑ 1–5</td>
+        <td>↑ (blood)</td>
+        <td class="abnormal">↑↑ markedly</td>
+        <td>Normal</td>
+      </tr>
+      <tr>
+        <td class="row-label">Glucose</td>
+        <td class="normal">60–80% serum</td>
+        <td class="abnormal">↓↓ &lt;40% serum</td>
+        <td>Normal</td>
+        <td class="abnormal">↓ &lt;45%</td>
+        <td>Normal</td>
+        <td class="normal">Normal</td>
+        <td class="normal">Normal</td>
+      </tr>
+      <tr>
+        <td class="row-label">Key finding</td>
+        <td>—</td>
+        <td>+Gram stain 60–80%</td>
+        <td>PCR HSV/Entero</td>
+        <td>AFB, ADA ↑</td>
+        <td>Xanthochromia</td>
+        <td>Albuminocytologic dissociation</td>
+        <td>Normal cells/protein</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="two-col">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--accent);letter-spacing:.1em;margin-bottom:.7rem">// SPECIAL TEST GUIDE</div>
+      <div class="card info">
+        <div class="card-label">🧪 Order by Condition</div>
+        <h3>Additional CSF Tests</h3>
+        <ul>
+          <li><strong>Cryptococcal Ag:</strong> HIV+, immunocompromised</li>
+          <li><strong>HSV/VZV PCR:</strong> Encephalitis, temporal lobe</li>
+          <li><strong>Enterovirus PCR:</strong> Viral meningitis</li>
+          <li><strong>AFB smear + culture:</strong> TB suspicion</li>
+          <li><strong>Oligoclonal bands:</strong> MS workup (compare serum)</li>
+          <li><strong>Cytology:</strong> Leptomeningeal mets</li>
+          <li><strong>VDRL:</strong> Neurosyphilis</li>
+          <li><strong>NMDAR antibodies:</strong> Autoimmune encephalitis</li>
+          <li><strong>14-3-3 / RT-QuIC:</strong> CJD</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--accent);letter-spacing:.1em;margin-bottom:.7rem">// PITFALLS</div>
+      <div class="card warn" style="margin-bottom:.8rem">
+        <div class="card-label">⚠️ Traumatic vs SAH</div>
+        <h3>Don't Miss SAH</h3>
+        <ul>
+          <li>Traumatic: RBCs Tube1 &gt; Tube4, clear supernatant</li>
+          <li>SAH: equal RBCs all tubes, xanthochromic supernatant</li>
+          <li>Xanthochromia needs ≥2h — don't tap too early</li>
+        </ul>
+      </div>
+      <div class="card caution">
+        <div class="card-label">⚠️ GBS</div>
+        <h3>Albuminocytologic Dissociation</h3>
+        <ul>
+          <li>High protein (&gt;0.45, often markedly ↑)</li>
+          <li>Normal or near-normal WBC (&lt;10)</li>
+          <li>May be normal in first 1–2 weeks</li>
+          <li>Repeat LP in 1–2 weeks if GBS strongly suspected</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="margin-top:1rem">
+    <strong>Empirical Treatment — Don't Wait:</strong> Bacterial meningitis suspected → Ceftriaxone 2g IV + Dexamethasone 0.15 mg/kg IV (reduces hearing loss in H. flu, may reduce mortality in S. pneumo) ± Ampicillin 2g IV if &gt;50 yrs or immunocompromised (Listeria coverage) + Aciclovir 10 mg/kg IV if HSV encephalitis cannot be excluded. Start immediately. LP findings refine, don't delay, treatment.
+  </div>
+</div>
+
+</main>
+
+<script>
+function showSection(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleAccordion(header){
+  const body=header.nextElementSibling;
+  const isOpen=body.classList.contains('open');
+  header.closest('.section').querySelectorAll('.accordion-body').forEach(b=>b.classList.remove('open'));
+  header.closest('.section').querySelectorAll('.accordion-header').forEach(h=>h.classList.remove('open'));
+  if(!isOpen){body.classList.add('open');header.classList.add('open');}
+}
+function toggleProblem(header){
+  const body=header.nextElementSibling;
+  const chevron=header.querySelector('.accordion-chevron');
+  const isOpen=body.classList.contains('open');
+  document.querySelectorAll('.problem-body').forEach(b=>b.classList.remove('open'));
+  document.querySelectorAll('.problem-header .accordion-chevron').forEach(c=>c.style.transform='');
+  if(!isOpen){body.classList.add('open');chevron.style.transform='rotate(180deg)';}
+}
+function selectApproach(card,type){
+  document.querySelectorAll('.approach-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  const detail=document.getElementById('approachDetail');
+  document.getElementById('approachDetail').style.display='block';
+  if(type==='lateral'){
+    document.getElementById('approachTitle').textContent='🛌 Lateral Decubitus — Technique Notes';
+    document.getElementById('approachText').innerHTML='Spine parallel to bed edge — check ear–shoulder–hip–knee alignment. Pillow between knees. Assistant stands in front maintaining the curl. After draping, confirm landmark through drape with non-dominant thumb.<br><br><strong>Opening pressure:</strong> Valid in this position. Ask patient to partially straighten legs once needle is in — reduces transmitted abdominal pressure for accurate reading.';
+  }else{
+    document.getElementById('approachTitle').textContent='🪑 Sitting Position — Technique Notes';
+    document.getElementById('approachText').innerHTML='Patient sits at bed edge, feet on stool. Ask them to "hunch like a frightened cat" — lumbar spine must flex, not just thoracic. Hugging a pillow maintains position. Shoulders should NOT be rotated.<br><br><strong>Opening pressure:</strong> NOT reliable sitting — if accurate pressure needed (IIH), collect CSF sitting then carefully roll patient lateral before attaching manometer.';
+  }
+}
+function toggleCheck(item){
+  item.classList.toggle('checked');
+  item.querySelector('.check-box').textContent=item.classList.contains('checked')?'✓':'';
+  updateProgress();
+}
+function updateProgress(){
+  const all=document.querySelectorAll('#prepChecklist .check-item');
+  const done=document.querySelectorAll('#prepChecklist .check-item.checked');
+  const pct=all.length?(done.length/all.length*100):0;
+  document.getElementById('prepProgress').style.width=pct+'%';
+  document.getElementById('prepCount').textContent=done.length;
+  document.getElementById('prepTotal').textContent=all.length;
+}
+updateProgress();
+</script>
+</body>
+</html>
